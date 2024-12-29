@@ -11,8 +11,9 @@ func (c Chat) String() string {
 }
 
 type Message struct {
-	Text string `json:"text"`
-	Chat Chat   `json:"chat"`
+	Text    string `json:"text"`
+	Chat    Chat   `json:"chat"`
+	Caption string `json:"caption"`
 }
 
 func (m Message) String() string {
