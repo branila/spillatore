@@ -1,21 +1,21 @@
-FROM golang:1.23.3 AS builder
+FROM golang:1.20 AS builder
 
 WORKDIR /app
 
+COPY go.mod go.sum ./
+
+RUN go mod download
+
 COPY . .
 
-RUN go mod tidy && go build -o SpillatoreBot .
+RUN go build -o spillatore .
 
 FROM debian:bullseye-slim
 
 WORKDIR /app
 
-COPY --from=builder /app/SpillatoreBot /app/SpillatoreBot
-
-COPY spillatore.json /app/spillatore.json
-
-ENV SPILLATORE_DB=/app/spillatore.json
+COPY --from=builder /app/bot .
 
 EXPOSE 8080
 
-CMD ["/app/SpillatoreBot"]
+CMD ["./bot"]
