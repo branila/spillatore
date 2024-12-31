@@ -10,7 +10,7 @@ COPY . .
 
 RUN go build -o spillatore .
 
-FROM debian:bullseye-slim
+FROM alpine:3.14
 
 WORKDIR /app
 
