@@ -14,8 +14,8 @@ FROM debian:bullseye-slim
 
 WORKDIR /app
 
-COPY --from=builder /app/bot .
+COPY --from=builder /app/spillatore .
 
 EXPOSE 8080
 
-CMD ["./bot"]
+CMD ["./spillatore"]
