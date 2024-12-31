@@ -11,7 +11,7 @@ services:
       - "traefik.http.routers.spillatore.rule=Host(`spillatore.branila.it`)"
       - "traefik.http.routers.spillatore.tls=true"
       - "traefik.http.routers.spillatore.tls.certresolver=cloudflare"
-      - "traefik.http.services.spillatore.loadbalancer.server.port=3000"
+      - "traefik.http.services.spillatore.loadbalancer.server.port=8080"
 networks:
   traefik:
     external: true
