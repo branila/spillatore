@@ -23,7 +23,7 @@ func Setup() {
 
 	// Check if the config file exists
 	if _, err := os.Stat(defaultConfigPath); os.IsNotExist(err) {
-		fmt.Printf("Config file not found. Creating default config file at %s", defaultConfigPath)
+		fmt.Printf("Config file not found. Creating default config file at %s\n", defaultConfigPath)
 
 		defaultConfig := Config{
 			Token:   "your-telegram-bot-token",
@@ -32,7 +32,7 @@ func Setup() {
 
 		file, err := os.Create(defaultConfigPath)
 		if err != nil {
-			log.Fatalf("Error creating default config file: %s", err)
+			log.Fatalf("Error creating default config file: %s\n", err)
 		}
 		defer file.Close()
 
@@ -40,7 +40,7 @@ func Setup() {
 		encoder.SetIndent("", "  ")
 
 		if err := encoder.Encode(defaultConfig); err != nil {
-			log.Fatalf("Error writing default config file: %s", err)
+			log.Fatalf("Error writing default config file: %s\n", err)
 		}
 
 		log.Println("Default config file created. Please update it with your settings and restart the application.")
@@ -59,7 +59,7 @@ func Setup() {
 
 	err = json.NewDecoder(file).Decode(&config)
 	if err != nil {
-		log.Fatalf("Error decoding config file: %s", err)
+		log.Fatalf("Error decoding config file: %s\n", err)
 	}
 
 	Token = config.Token
