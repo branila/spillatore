@@ -14,6 +14,9 @@ FROM alpine:3.14
 
 WORKDIR /app
 
+# Installa glibc per compatibilità
+RUN apk add --no-cache libc6-compat
+
 COPY --from=builder /app/spillatore .
 
 EXPOSE 8080
