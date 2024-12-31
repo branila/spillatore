@@ -3,6 +3,8 @@ FROM golang:1.23 AS builder
 WORKDIR /app
 
 COPY go.mod ./
+COPY config.json /app/config.json
+COPY spillatore.json /app/spillatore.json
 
 RUN go mod download
 
