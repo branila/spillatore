@@ -19,7 +19,7 @@ type Config struct {
 }
 
 func Setup() {
-	const defaultConfigPath = "./config.json"
+	const defaultConfigPath = "./app/config.json"
 
 	// Check if the config file exists
 	if _, err := os.Stat(defaultConfigPath); os.IsNotExist(err) {

@@ -16,6 +16,7 @@ FROM alpine:3.14
 
 WORKDIR /app
 
+COPY --from=builder /app/config.json /app/config.json
 COPY --from=builder /app/spillatore .
 
 EXPOSE 8080
