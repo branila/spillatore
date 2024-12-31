@@ -1,0 +1,18 @@
+services:
+  spillatore:
+    container_name: spillatore
+    image: branila/spillatore
+    restart: always
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.spillatore.entrypoints=https"
+      - "traefik.http.routers.spillatore.rule=Host(`spillatore.branila.it`)"
+      - "traefik.http.routers.spillatore.tls=true"
+      - "traefik.http.routers.spillatore.tls.certresolver=cloudflare"
+      - "traefik.http.services.spillatore.loadbalancer.server.port=3000"
+networks:
+  traefik:
+    external: true
+    name: traefik-servicenet
