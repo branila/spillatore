@@ -98,7 +98,7 @@ func processMessage(msg string) string {
 }
 
 func extractNumber(msg string) int {
-	numRegexp := regexp.MustCompile(`\\d+`)
+	numRegexp := regexp.MustCompile(`\d+`)
 	match := numRegexp.FindString(msg)
 	num, _ := strconv.Atoi(match) // Non serve gestire l'errore, il numero è garantito
 	return num
