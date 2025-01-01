@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"regexp"
@@ -22,16 +21,11 @@ func Master(w http.ResponseWriter, r *http.Request) {
 
 	receivedMsg := getMessageText(*update)
 
-	if !strings.HasPrefix(receivedMsg, "@SpillatoreBot") {
+	if !strings.Contains(receivedMsg, "@SpillatoreBot") {
 		return
 	}
 
-	reply, err := processMessage(receivedMsg)
-	if err != nil {
-		log.Printf("Error processing message: %s", err)
-	}
-
-	fmt.Println(reply)
+	reply := processMessage(receivedMsg)
 
 	sendReply(update.Message.Chat.Id, reply)
 }
@@ -44,17 +38,36 @@ func getMessageText(update types.Update) string {
 	return update.Message.Caption // The message is an image with a caption
 }
 
-func processMessage(msg string) (string, error) {
-	rexp := regexp.MustCompile(`^@SpillatoreBot \+(\d+)$`)
-	if !rexp.MatchString(msg) {
-		return "", nil
-	}
-
+func processAddition(msg string) string {
 	num := extractNumber(msg)
 
 	database.IncrementCounter(num)
 
-	return "Carusi siamo a " + strconv.Itoa(database.GetCounter()) + " bire. 🍻", nil
+	return "Carusi siamo a " + strconv.Itoa(database.GetCounter()) + " bire 🍻"
+}
+
+func processMessage(msg string) string {
+	additionRegexp := regexp.MustCompile(`\+(\d+)`)
+	getCounterRegexp := regexp.MustCompile(`a quante siamo`)
+	sanFaiRegexp := regexp.MustCompile(`san fai`)
+	regole := regexp.MustCompile(`regole`)
+
+	switch {
+	case additionRegexp.MatchString(msg):
+		return processAddition(msg)
+
+	case getCounterRegexp.MatchString(msg):
+		return "Siamo a " + strconv.Itoa(database.GetCounter()) + " bire 🍻"
+
+	case sanFaiRegexp.MatchString(msg):
+		return "Ma stai zitto"
+
+	case regole.MatchString(msg):
+		return "Non rompere i coglioni"
+
+	default:
+		return "Lasciami in pace"
+	}
 }
 
 func extractNumber(msg string) int {
