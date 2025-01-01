@@ -63,10 +63,13 @@ func processSetting(msg string) string {
 }
 
 func processMessage(msg string) string {
+	msg = strings.ToLower(msg)
+
 	additionRegexp := regexp.MustCompile(`\+(\d+)`)
 	subtractionRegexp := regexp.MustCompile(`-(\d+)`)
 	setRegexp := regexp.MustCompile(`siamo a (\d+)`)
-	getCounterRegexp := regexp.MustCompile(`a quante siamo`)
+	getCounterRegexp1 := regexp.MustCompile(`a quante siamo`)
+	getCounterRegexp2 := regexp.MustCompile(`quante ne abbiamo`)
 	sanFaiRegexp := regexp.MustCompile(`san fai`)
 	regoleRegexp := regexp.MustCompile(`regole`)
 
@@ -80,7 +83,7 @@ func processMessage(msg string) string {
 	case setRegexp.MatchString(msg):
 		return processSetting(msg)
 
-	case getCounterRegexp.MatchString(msg):
+	case getCounterRegexp1.MatchString(msg) || getCounterRegexp2.MatchString(msg):
 		return "Siamo a " + strconv.Itoa(database.GetCounter()) + " bire 🍻"
 
 	case sanFaiRegexp.MatchString(msg):
@@ -95,18 +98,9 @@ func processMessage(msg string) string {
 }
 
 func extractNumber(msg string) int {
-	parts := strings.Split(msg, "+")
-
-	if len(parts) == 1 {
-		parts = strings.Split(msg, "-")
-	}
-
-	if len(parts) == 1 {
-		parts = strings.Split(msg, "siamo a ")
-	}
-
-	num, _ := strconv.Atoi(parts[1])
-
+	numRegexp := regexp.MustCompile(`\\d+`)
+	match := numRegexp.FindString(msg)
+	num, _ := strconv.Atoi(match) // Non serve gestire l'errore, il numero è garantito
 	return num
 }
 
