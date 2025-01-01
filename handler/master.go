@@ -46,15 +46,39 @@ func processAddition(msg string) string {
 	return "Carusi siamo a " + strconv.Itoa(database.GetCounter()) + " bire 🍻"
 }
 
+func processSubtraction(msg string) string {
+	num := extractNumber(msg)
+
+	database.DecrementCounter(num)
+
+	return "Carusi siamo a " + strconv.Itoa(database.GetCounter()) + " bire 🍻"
+}
+
+func processSetting(msg string) string {
+	num := extractNumber(msg)
+
+	database.SetCounter(num)
+
+	return "Picciotti ne abbiamo " + strconv.Itoa(database.GetCounter())
+}
+
 func processMessage(msg string) string {
 	additionRegexp := regexp.MustCompile(`\+(\d+)`)
+	subtractionRegexp := regexp.MustCompile(`-(\d+)`)
+	setRegexp := regexp.MustCompile(`siamo a (\d+)`)
 	getCounterRegexp := regexp.MustCompile(`a quante siamo`)
 	sanFaiRegexp := regexp.MustCompile(`san fai`)
-	regole := regexp.MustCompile(`regole`)
+	regoleRegexp := regexp.MustCompile(`regole`)
 
 	switch {
 	case additionRegexp.MatchString(msg):
 		return processAddition(msg)
+
+	case subtractionRegexp.MatchString(msg):
+		return processSubtraction(msg)
+
+	case setRegexp.MatchString(msg):
+		return processSetting(msg)
 
 	case getCounterRegexp.MatchString(msg):
 		return "Siamo a " + strconv.Itoa(database.GetCounter()) + " bire 🍻"
@@ -62,7 +86,7 @@ func processMessage(msg string) string {
 	case sanFaiRegexp.MatchString(msg):
 		return "Ma stai zitto"
 
-	case regole.MatchString(msg):
+	case regoleRegexp.MatchString(msg):
 		return "Non rompere i coglioni"
 
 	default:
@@ -72,6 +96,14 @@ func processMessage(msg string) string {
 
 func extractNumber(msg string) int {
 	parts := strings.Split(msg, "+")
+
+	if len(parts) == 1 {
+		parts = strings.Split(msg, "-")
+	}
+
+	if len(parts) == 1 {
+		parts = strings.Split(msg, "siamo a ")
+	}
 
 	num, _ := strconv.Atoi(parts[1])
 

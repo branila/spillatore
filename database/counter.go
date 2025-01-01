@@ -9,3 +9,15 @@ func IncrementCounter(n int) {
 
 	syncDatabase()
 }
+
+func DecrementCounter(n int) {
+	database.Counter -= n
+
+	syncDatabase()
+}
+
+func SetCounter(n int) {
+	database.Counter = n
+
+	syncDatabase()
+}
